@@ -1,6 +1,6 @@
 GO=$(shell which go)
 
-.PHONY: p1 p2 p3 p4
+.PHONY: p1 p2 p3 p4 p5
 
 p1:
 	$(GO) run p1/main.go
@@ -13,6 +13,9 @@ p3:
 
 p4:
 	$(GO) run p4/main.go
+
+p5:
+	$(GO) run p5/main.go
 
 test:
 	go test -v ./...

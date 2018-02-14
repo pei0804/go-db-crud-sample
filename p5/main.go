@@ -5,7 +5,7 @@ import (
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/pei0804/go-db-crud-sample/p2/model"
+	"github.com/pei0804/go-db-crud-sample/p5/model"
 	migrate "github.com/rubenv/sql-migrate"
 )
 
@@ -23,11 +23,7 @@ func main() {
 	log.Printf("Applied %d migrations!\n", n)
 
 	db := model.NewDB(dbcon)
-	tx, err := db.Begin()
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = Commit(tx.Tx, func() error {
+	err = db.Transaction(func(tx *model.Tx) error {
 		_, err = tx.ArticleAdd("title", "body")
 		if err != nil {
 			return err
@@ -53,19 +49,4 @@ func main() {
 	for k, v := range timelines {
 		log.Println(k, v)
 	}
-}
-
-func Commit(tx *sql.Tx, txFunc func() error) (err error) {
-	defer func() {
-		if p := recover(); p != nil {
-			tx.Rollback()
-			panic(p)
-		} else if err != nil {
-			tx.Rollback()
-		} else {
-			err = tx.Commit()
-		}
-	}()
-	err = txFunc()
-	return
 }
