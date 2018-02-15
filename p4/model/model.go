@@ -32,7 +32,7 @@ func (d *DB) TimelinesAll() ([]Timeline, error) {
 
 func (d *Tx) TimelinesAdd(title string) (sql.Result, error) {
 	stmt, err := d.Prepare(`
-	INSERT INTO atimelines (title)
+	INSERT INTO timelines (title)
 	VALUES(?)
 	`)
 	if err != nil {
